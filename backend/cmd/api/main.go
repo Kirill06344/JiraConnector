@@ -2,7 +2,6 @@ package main
 
 import (
 	"backend/cmd/internal"
-	"backend/cmd/pkg"
 	"fmt"
 	"net/http"
 )
@@ -12,7 +11,7 @@ type application struct {
 
 func main() {
 	app := &application{}
-	logger, err := pkg.ConfigureLogger()
+	logger, err := internal.ConfigureLogger()
 	if err != nil {
 		logger.Fatal(err)
 		return
