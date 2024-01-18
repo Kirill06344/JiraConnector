@@ -1,34 +1,41 @@
 package main
 
 import (
-	"backend/cmd/internal"
+	"backend/internal"
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
 type application struct {
+	cfg    *internal.Config
+	logger *logrus.Logger
 }
 
 func main() {
-	app := &application{}
-	logger, err := internal.ConfigureLogger()
+	log, err := internal.ConfigureLogger()
 	if err != nil {
-		logger.Fatal(err)
+		log.Fatal(err)
 		return
 	}
 
-	cfg, err := internal.GetConfig("config.yml")
+	config, err := internal.GetConfig("config.yml")
 	if err != nil {
-		logger.Fatal(err)
+		log.Fatal(err)
 		return
+	}
+
+	app := &application{
+		cfg:    config,
+		logger: log,
 	}
 
 	server := &http.Server{
-		Addr:    fmt.Sprintf(":%d", cfg.Server.Port),
+		Addr:    fmt.Sprintf(":%d", config.Server.Port),
 		Handler: app.routes(),
 	}
 
 	err = server.ListenAndServe()
 
-	logger.Fatal(err)
+	log.Fatal(err)
 }
