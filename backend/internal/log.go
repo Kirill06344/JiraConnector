@@ -10,13 +10,13 @@ import (
 func ConfigureLogger() (*log.Logger, error) {
 	logger := log.New()
 
-	logFile, err := createLogFile("cmd/logs/logs.log")
+	logFile, err := createLogFile("logs/logs.log")
 	if err != nil {
 		return nil, err
 	}
 	logger.SetOutput(logFile)
 
-	errLogFile, err := createLogFile("cmd/logs/err_logs.log")
+	errLogFile, err := createLogFile("logs/err_logs.log")
 	if err != nil {
 		return nil, err
 	}
