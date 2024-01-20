@@ -1,10 +1,4 @@
-CREATE USER pguser WITH ENCRYPTED PASSWORD 'pgpwd';
-
-CREATE DATABASE testdb;
-
-GRANT ALL PRIVILEGES ON DATABASE testdb TO pguser;
-
-CREATE TABLE Projects
+CREATE TABLE Project
 (
     id    serial PRIMARY KEY,
     title TEXT
@@ -20,7 +14,7 @@ CREATE TABLE Issue
 (
     id          serial PRIMARY KEY,
     projectId   INT NOT NULL,
-    FOREIGN KEY (projectId) REFERENCES Projects (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (projectId) REFERENCES Project (id) ON DELETE CASCADE ON UPDATE CASCADE,
     authorId    INT NOT NULL,
     FOREIGN KEY (authorId) REFERENCES Author (id) ON DELETE CASCADE ON UPDATE CASCADE,
     assigneeId  INT NOT NULL,
@@ -38,6 +32,7 @@ CREATE TABLE Issue
 
 CREATE TABLE StatusChanges
 (
+    id         serial primary key,
     issueId    INT NOT NULL,
     FOREIGN KEY (issueId) REFERENCES Issue (id) ON DELETE CASCADE ON UPDATE CASCADE,
     authorId   INT NOT NULL,
@@ -46,4 +41,10 @@ CREATE TABLE StatusChanges
     fromStatus TEXT,
     toStatus   TEXT
 );
+
+DROP ROLE IF EXISTS pguser;
+CREATE USER pguser WITH ENCRYPTED PASSWORD 'pgpwd';
+
+GRANT ALL ON ALL TABLES IN SCHEMA public TO pguser;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO pguser;
 
