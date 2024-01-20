@@ -20,23 +20,23 @@ func errorResponse(w http.ResponseWriter, r *http.Request, status int, message i
 	}
 }
 
-func serverErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
+func ServerErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
 	logError(r, err)
 
 	message := "the server encountered a problem and could not process your request"
 	errorResponse(w, r, http.StatusInternalServerError, message)
 }
 
-func notFoundResponse(w http.ResponseWriter, r *http.Request) {
+func NotFoundResponse(w http.ResponseWriter, r *http.Request) {
 	message := "the requested resource could not be found"
 	errorResponse(w, r, http.StatusNotFound, message)
 }
 
-func methodNotAllowedResponse(w http.ResponseWriter, r *http.Request) {
+func MethodNotAllowedResponse(w http.ResponseWriter, r *http.Request) {
 	message := fmt.Sprintf("the %s method is not supported for this resource", r.Method)
 	errorResponse(w, r, http.StatusMethodNotAllowed, message)
 }
 
-func badRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
+func BadRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
 	errorResponse(w, r, http.StatusBadRequest, err.Error())
 }

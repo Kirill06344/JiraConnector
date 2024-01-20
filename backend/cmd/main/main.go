@@ -1,7 +1,8 @@
 package main
 
 import (
-	"backend/internal/api/controller"
+	"backend/internal/controller"
+	"backend/internal/router"
 	"backend/internal/utils"
 	"fmt"
 	"net/http"
@@ -14,9 +15,11 @@ func main() {
 		return
 	}
 
+	issue := &controller.IssueController{}
+
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%d", config.Server.Port),
-		Handler: controller.Routes(),
+		Handler: router.NewRouter(issue),
 	}
 
 	err = server.ListenAndServe()

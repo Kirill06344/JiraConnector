@@ -1,20 +1,23 @@
 package controller
 
 import (
-	response "backend/internal/api/dto/response"
+	response2 "backend/internal/dto/response"
 	utils "backend/internal/utils"
 	"net/http"
 	"time"
 )
 
-func getAllIssues(w http.ResponseWriter, r *http.Request) {
+type IssueController struct {
+}
+
+func (ic *IssueController) GetAllIssues(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getIssue(w http.ResponseWriter, r *http.Request) {
+func (ic *IssueController) GetIssue(w http.ResponseWriter, r *http.Request) {
 	id, err := utils.ReadIdParam(r)
 	if err != nil {
-		notFoundResponse(w, r)
+		NotFoundResponse(w, r)
 		return
 	}
 	//....
@@ -28,11 +31,11 @@ func getIssue(w http.ResponseWriter, r *http.Request) {
 
 	err = utils.WriteJSON(w, http.StatusOK, env, nil)
 	if err != nil {
-		serverErrorResponse(w, r, err)
+		ServerErrorResponse(w, r, err)
 	}
 }
 
-func createIssue(w http.ResponseWriter, r *http.Request) {
+func (ic *IssueController) CreateIssue(w http.ResponseWriter, r *http.Request) {
 	//need to change this and declare this struct in any file
 	var input struct {
 		Id  int64  `json:"Id"`
@@ -41,24 +44,24 @@ func createIssue(w http.ResponseWriter, r *http.Request) {
 
 	err := utils.ReadJSON(w, r, &input)
 	if err != nil {
-		badRequestResponse(w, r, err)
+		BadRequestResponse(w, r, err)
 		return
 	}
 
 }
 
-func updateIssue(w http.ResponseWriter, r *http.Request) {
+func (ic *IssueController) UpdateIssue(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func deleteIssue(w http.ResponseWriter, r *http.Request) {
+func (ic *IssueController) DeleteIssue(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func tmpIssue(id int64) response.Issue {
-	return response.Issue{
+func tmpIssue(id int64) response2.Issue {
+	return response2.Issue{
 		Id:          id,
-		Project:     response.Project{Id: 123, Title: "asdasd"},
+		Project:     response2.Project{Id: 123, Title: "asdasd"},
 		Key:         "ddsd",
 		CreatedTime: time.Time{},
 		ClosedTime:  time.Time{},
