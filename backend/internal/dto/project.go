@@ -1,4 +1,4 @@
-package response
+package dto
 
 type Project struct {
 	Id    int64  `json:"Id"`
