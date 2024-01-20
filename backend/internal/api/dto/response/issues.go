@@ -1,6 +1,8 @@
-package data
+package response
 
-import "time"
+import (
+	"time"
+)
 
 type Issue struct {
 	Id          int64     `json:"Id"`

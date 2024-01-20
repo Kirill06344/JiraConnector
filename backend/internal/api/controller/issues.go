@@ -1,20 +1,20 @@
-package main
+package controller
 
 import (
-	"backend/internal/data"
-	"backend/utils"
+	response "backend/internal/api/dto/response"
+	utils "backend/internal/utils"
 	"net/http"
 	"time"
 )
 
-func (app *application) getAllIssuesHandler(w http.ResponseWriter, r *http.Request) {
+func getAllIssues(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (app *application) getIssueHandler(w http.ResponseWriter, r *http.Request) {
+func getIssue(w http.ResponseWriter, r *http.Request) {
 	id, err := utils.ReadIdParam(r)
 	if err != nil {
-		app.notFoundResponse(w, r)
+		notFoundResponse(w, r)
 		return
 	}
 	//....
@@ -28,11 +28,11 @@ func (app *application) getIssueHandler(w http.ResponseWriter, r *http.Request) 
 
 	err = utils.WriteJSON(w, http.StatusOK, env, nil)
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
+		serverErrorResponse(w, r, err)
 	}
 }
 
-func (app *application) createIssueHandler(w http.ResponseWriter, r *http.Request) {
+func createIssue(w http.ResponseWriter, r *http.Request) {
 	//need to change this and declare this struct in any file
 	var input struct {
 		Id  int64  `json:"Id"`
@@ -41,25 +41,24 @@ func (app *application) createIssueHandler(w http.ResponseWriter, r *http.Reques
 
 	err := utils.ReadJSON(w, r, &input)
 	if err != nil {
-		app.badRequestResponse(w, r, err)
+		badRequestResponse(w, r, err)
 		return
 	}
 
-	app.logger.Printf("%+v\n", input)
 }
 
-func (app *application) updateIssueHandler(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func (app *application) deleteIssueHandler(w http.ResponseWriter, r *http.Request) {
+func updateIssue(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func tmpIssue(id int64) data.Issue {
-	return data.Issue{
+func deleteIssue(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func tmpIssue(id int64) response.Issue {
+	return response.Issue{
 		Id:          id,
-		Project:     data.Project{Id: 123, Title: "asdasd"},
+		Project:     response.Project{Id: 123, Title: "asdasd"},
 		Key:         "ddsd",
 		CreatedTime: time.Time{},
 		ClosedTime:  time.Time{},
