@@ -3,7 +3,6 @@ package repository
 import (
 	"backend/internal/dto"
 	"backend/internal/entity"
-	"backend/internal/service"
 	"gorm.io/gorm"
 )
 
@@ -11,7 +10,7 @@ type ProjectRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func NewProjectRepository(db *gorm.DB) service.ProjectRepository {
+func newProjectRepository(db *gorm.DB) *ProjectRepositoryImpl {
 	return &ProjectRepositoryImpl{db: db}
 }
 
@@ -34,13 +33,15 @@ func (repo *ProjectRepositoryImpl) FindById(id uint) (*entity.Project, error) {
 }
 
 func (repo *ProjectRepositoryImpl) Create(project *dto.Project) error {
-	//TODO implement me
-	panic("implement me")
+	var model = entity.Project{Title: project.Title}
+	result := repo.db.Create(&model)
+	return result.Error
 }
 
-func (repo *ProjectRepositoryImpl) Update(id uint, issue *dto.Project) error {
-	//TODO implement me
-	panic("implement me")
+func (repo *ProjectRepositoryImpl) Update(project *dto.Project) error {
+	var model = entity.Project{Id: project.Id, Title: project.Title}
+	result := repo.db.Save(&model)
+	return result.Error
 }
 
 func (repo *ProjectRepositoryImpl) Delete(id uint) error {

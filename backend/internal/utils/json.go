@@ -28,7 +28,9 @@ func WriteJSON(w http.ResponseWriter, status int, data Envelope, headers http.He
 }
 
 func ReadJSON(w http.ResponseWriter, r *http.Request, dst interface{}) error {
-	err := json.NewDecoder(r.Body).Decode(dst)
+	dec := json.NewDecoder(r.Body)
+	dec.DisallowUnknownFields()
+	err := dec.Decode(dst)
 	if err != nil {
 
 		var syntaxError *json.SyntaxError

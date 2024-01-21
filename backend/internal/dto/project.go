@@ -1,6 +1,6 @@
 package dto
 
 type Project struct {
-	Id    int64  `json:"Id"`
+	Id    uint   `json:"Id"`
 	Title string `json:"Title"`
 }

@@ -5,7 +5,7 @@ import (
 )
 
 type Issue struct {
-	Id          int64     `json:"Id"`
+	Id          uint      `json:"Id"`
 	Project     Project   `json:"Project"`
 	Key         string    `json:"Key"`
 	CreatedTime time.Time `json:"CreatedTime"`

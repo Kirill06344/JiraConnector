@@ -1,7 +1,7 @@
 package entity
 
 type Project struct {
-	Id    int64
+	Id    uint
 	Title string
 }
 

@@ -2,13 +2,11 @@ package main
 
 import (
 	"backend/internal/controller"
-	"backend/internal/repository"
+	"backend/internal/database"
 	"backend/internal/router"
 	"backend/internal/service"
 	"backend/internal/utils"
 	"fmt"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"net/http"
 )
 
@@ -19,47 +17,22 @@ func main() {
 		return
 	}
 
-	db, err := connectDB(config)
+	db, err := database.NewDB(config)
 	if err != nil {
+		utils.Logger.Fatal(err)
 		return
 	}
 
-	projectService := service.NewProjectService(repository.NewProjectRepository(db))
+	serviceGroup := service.NewService(db.Repository())
 
-	projectController := controller.NewProjectController(&projectService)
+	controllerGroup := controller.NewGroup(serviceGroup)
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%d", config.Server.Port),
-		Handler: router.NewRouter(projectController),
+		Handler: router.NewRouter(controllerGroup),
 	}
 
 	err = server.ListenAndServe()
 
 	utils.Logger.Fatal(err)
-}
-
-func connectDB(cfg *utils.Config) (*gorm.DB, error) {
-	dbCfg := cfg.Database
-	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", dbCfg.User, dbCfg.Password, dbCfg.Host, dbCfg.Port, dbCfg.Name)
-	utils.Logger.Print("Open initialize db session")
-
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		return nil, err
-	}
-
-	postgresDB, _ := db.DB()
-	if err != nil {
-		return nil, err
-	}
-
-	err = postgresDB.Ping()
-
-	if err != nil {
-		utils.Logger.Fatalln("Connection to database is not established")
-		return nil, err
-	}
-	utils.Logger.Print("Connection to database is established")
-
-	return db, err
 }

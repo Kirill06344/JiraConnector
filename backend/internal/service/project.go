@@ -2,23 +2,15 @@ package service
 
 import (
 	"backend/internal/dto"
-	"backend/internal/entity"
+	"backend/internal/repository"
 )
 
-type ProjectRepository interface {
-	Find() ([]entity.Project, error)
-	FindById(id uint) (*entity.Project, error)
-	Create(issue *dto.Project) error
-	Update(id uint, issue *dto.Project) error
-	Delete(id uint) error
-}
-
 type ProjectService struct {
-	repo ProjectRepository
+	repo repository.ProjectRepository
 }
 
-func NewProjectService(repo ProjectRepository) ProjectService {
-	return ProjectService{
+func NewProjectService(repo repository.ProjectRepository) *ProjectService {
+	return &ProjectService{
 		repo: repo,
 	}
 }
@@ -47,6 +39,19 @@ func (s *ProjectService) FindById(id uint) (*dto.Project, error) {
 		Id:    data.Id,
 		Title: data.Title,
 	}, nil
+}
+
+func (s *ProjectService) Create(project *dto.Project) error {
+	return s.repo.Create(project)
+}
+
+func (s *ProjectService) Update(id uint, project *dto.Project) error {
+	_, err := s.repo.FindById(id)
+	if err != nil {
+		return err
+	}
+	project.Id = id
+	return s.repo.Update(project)
 }
 
 func (s *ProjectService) Delete(id uint) error {

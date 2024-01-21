@@ -10,6 +10,10 @@ type IssueRepositoryImpl struct {
 	db *gorm.DB
 }
 
+func newIssueRepository(db *gorm.DB) *IssueRepositoryImpl {
+	return &IssueRepositoryImpl{db: db}
+}
+
 func (repo *IssueRepositoryImpl) Find() ([]entity.Issue, error) {
 	var issues []entity.Issue
 	result := repo.db.Find(&issues)
@@ -28,7 +32,7 @@ func (repo *IssueRepositoryImpl) FindById(id uint) (*entity.Issue, error) {
 	return &issue, nil
 }
 
-func (repo *IssueRepositoryImpl) Create(id uint, issue *dto.Issue) error {
+func (repo *IssueRepositoryImpl) Create(issue *dto.Issue) error {
 	//TODO implement me
 	return nil
 }

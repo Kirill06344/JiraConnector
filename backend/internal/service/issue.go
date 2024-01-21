@@ -1,24 +1,13 @@
 package service
 
-import (
-	"backend/internal/dto"
-	"backend/internal/entity"
-)
-
-type IssueRepository interface {
-	Find() ([]entity.Issue, error)
-	FindById(id uint) (entity.Issue, error)
-	Create(issue *dto.Issue) error
-	Update(id uint, issue *dto.Issue) error
-	Delete(id uint) error
-}
+import "backend/internal/repository"
 
 type IssueService struct {
-	repo IssueRepository
+	repo repository.IssueRepository
 }
 
-func NewIssueService(repo IssueRepository) IssueService {
-	return IssueService{
+func NewIssueService(repo repository.IssueRepository) *IssueService {
+	return &IssueService{
 		repo: repo,
 	}
 }
