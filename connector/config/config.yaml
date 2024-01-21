@@ -1,0 +1,13 @@
+DBSettings:
+    dbUser: pguser
+    dbPassword: pgpwd
+    dbHost: 127.0.0.1
+    dbPort: 5432
+    dbName: testdb
+
+ProgramSettings:
+  jiraUrl: "dsdsd"
+  threadCount: 3
+  issueInOneRequest: 500
+  maxTimeSleep: 30ms
+  minTimeSleep: 1h
