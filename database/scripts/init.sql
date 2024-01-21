@@ -1,6 +1,7 @@
 CREATE TABLE Project
 (
     id    serial PRIMARY KEY,
+    key TEXT,
     title TEXT
 );
 
@@ -18,6 +19,7 @@ CREATE TABLE Issue
     authorId    INT NOT NULL,
     FOREIGN KEY (authorId) REFERENCES Author (id) ON DELETE CASCADE ON UPDATE CASCADE,
     assigneeId  INT NOT NULL,
+    FOREIGN KEY (assigneeId) REFERENCES Author (id) ON DELETE CASCADE ON UPDATE CASCADE,
     key         TEXT,
     summary     TEXT,
     description TEXT,
