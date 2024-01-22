@@ -20,6 +20,8 @@ type DBSettings struct {
 }
 
 type ProgramSettings struct {
+	Host              string        `yaml:"bindAddress"`
+	Port              uint          `yaml:"port"`
 	JiraUrl           string        `yaml:"jiraUrl"`
 	ThreadCount       uint          `yaml:"threadCount"`
 	IssueInOneRequest uint          `yaml:"issueInOneRequest"`
