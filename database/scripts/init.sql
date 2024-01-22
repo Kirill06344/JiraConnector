@@ -14,21 +14,21 @@ CREATE TABLE Author
 CREATE TABLE Issue
 (
     id          serial PRIMARY KEY,
-    projectId   INT NOT NULL,
-    FOREIGN KEY (projectId) REFERENCES Project (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    authorId    INT NOT NULL,
-    FOREIGN KEY (authorId) REFERENCES Author (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    assigneeId  INT NOT NULL,
-    FOREIGN KEY (assigneeId) REFERENCES Author (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    project_id   INT NOT NULL,
+    FOREIGN KEY (project_id) REFERENCES Project (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    author_id    INT NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES Author (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    assignee_id  INT NOT NULL,
+    FOREIGN KEY (assignee_id) REFERENCES Author (id) ON DELETE CASCADE ON UPDATE CASCADE,
     key         TEXT,
     summary     TEXT,
     description TEXT,
     type        TEXT,
     priority    TEXT,
     status      TEXT,
-    createdTime TIMESTAMP WITHOUT TIME ZONE,
-    closedTime  TIMESTAMP WITHOUT TIME ZONE,
-    updatedTime TIMESTAMP WITHOUT TIME ZONE,
+    created_time TIMESTAMP WITHOUT TIME ZONE,
+    closed_time  TIMESTAMP WITHOUT TIME ZONE,
+    updated_time TIMESTAMP WITHOUT TIME ZONE,
     timeSpent   INT
 );
 
@@ -49,4 +49,6 @@ CREATE USER pguser WITH ENCRYPTED PASSWORD 'pgpwd';
 
 GRANT ALL ON ALL TABLES IN SCHEMA public TO pguser;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO pguser;
+
+
 
