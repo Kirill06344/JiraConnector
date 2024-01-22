@@ -16,3 +16,7 @@ type Issue struct {
 	Priority    string
 	Status      string
 }
+
+func (Issue) TableName() string {
+	return "issue"
+}

@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"backend/internal/dto"
 	"backend/internal/entity"
 	"gorm.io/gorm"
 )
@@ -32,15 +31,13 @@ func (repo *ProjectRepositoryImpl) FindById(id uint) (*entity.Project, error) {
 	return &project, nil
 }
 
-func (repo *ProjectRepositoryImpl) Create(project *dto.Project) error {
-	var model = entity.Project{Title: project.Title}
-	result := repo.db.Create(&model)
+func (repo *ProjectRepositoryImpl) Create(project *entity.Project) error {
+	result := repo.db.Create(&project)
 	return result.Error
 }
 
-func (repo *ProjectRepositoryImpl) Update(project *dto.Project) error {
-	var model = entity.Project{Id: project.Id, Title: project.Title}
-	result := repo.db.Save(&model)
+func (repo *ProjectRepositoryImpl) Update(project *entity.Project) error {
+	result := repo.db.Save(&project)
 	return result.Error
 }
 

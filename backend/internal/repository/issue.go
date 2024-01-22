@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"backend/internal/dto"
 	"backend/internal/entity"
 	"gorm.io/gorm"
 )
@@ -32,18 +31,21 @@ func (repo *IssueRepositoryImpl) FindById(id uint) (*entity.Issue, error) {
 	return &issue, nil
 }
 
-func (repo *IssueRepositoryImpl) Create(issue *dto.Issue) error {
-	//TODO implement me
-	return nil
+func (repo *IssueRepositoryImpl) Create(issue *entity.Issue) error {
+	result := repo.db.Create(issue)
+	return result.Error
 }
 
-func (repo *IssueRepositoryImpl) Update(issue *dto.Issue) error {
-	//TODO implement me
-	return nil
+func (repo *IssueRepositoryImpl) Update(issue *entity.Issue) error {
+	result := repo.db.Save(&issue)
+	return result.Error
 }
 
 func (repo *IssueRepositoryImpl) Delete(id uint) error {
 	result := repo.db.Delete(&entity.Issue{}, id)
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
 	if result.Error != nil {
 		return result.Error
 	}

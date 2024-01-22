@@ -2,6 +2,7 @@ package service
 
 import (
 	"backend/internal/dto"
+	"backend/internal/entity"
 	"backend/internal/repository"
 )
 
@@ -25,9 +26,10 @@ func (s *ProjectService) Find() ([]dto.Project, error) {
 		projects[i] = dto.Project{
 			Id:    el.Id,
 			Title: el.Title,
+			Key:   el.Key,
 		}
 	}
-	return projects, err
+	return projects, nil
 }
 
 func (s *ProjectService) FindById(id uint) (*dto.Project, error) {
@@ -38,11 +40,13 @@ func (s *ProjectService) FindById(id uint) (*dto.Project, error) {
 	return &dto.Project{
 		Id:    data.Id,
 		Title: data.Title,
+		Key:   data.Key,
 	}, nil
 }
 
 func (s *ProjectService) Create(project *dto.Project) error {
-	return s.repo.Create(project)
+	var model = entity.Project{Title: project.Title, Key: project.Key}
+	return s.repo.Create(&model)
 }
 
 func (s *ProjectService) Update(id uint, project *dto.Project) error {
@@ -51,7 +55,8 @@ func (s *ProjectService) Update(id uint, project *dto.Project) error {
 		return err
 	}
 	project.Id = id
-	return s.repo.Update(project)
+	var model = entity.Project{Id: project.Id, Title: project.Title, Key: project.Key}
+	return s.repo.Update(&model)
 }
 
 func (s *ProjectService) Delete(id uint) error {

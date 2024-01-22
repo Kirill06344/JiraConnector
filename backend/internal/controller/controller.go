@@ -10,5 +10,6 @@ type Group struct {
 func NewGroup(service *service.Service) *Group {
 	return &Group{
 		Project: NewProjectController(service.Project),
+		Issue:   NewIssueController(service.Issue),
 	}
 }

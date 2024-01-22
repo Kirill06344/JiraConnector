@@ -10,6 +10,6 @@ type Service struct {
 func NewService(repository *repository.Repository) *Service {
 	return &Service{
 		Project: NewProjectService(repository.Project),
-		Issue:   NewIssueService(repository.Issue),
+		Issue:   NewIssueService(repository),
 	}
 }

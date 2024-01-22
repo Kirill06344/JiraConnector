@@ -14,5 +14,7 @@ type Issue struct {
 	Summary     string    `json:"Summary"`
 	Description string    `json:"Description"`
 	Priority    string    `json:"Priority"`
+	Creator     string    `json:"Creator"`
+	Assignee    string    `json:"Assignee"`
 	Status      string    `json:"Status"`
 }
