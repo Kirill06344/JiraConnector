@@ -8,8 +8,8 @@ DBSettings:
 ProgramSettings:
   bindAddress: 127.0.0.1
   port: 8080
-  jiraUrl: "dsdsd"
-  threadCount: 3
-  issueInOneRequest: 500
+  jiraUrl: https://issues.apache.org/jira/rest/api/2/
+  threadCount: 9
+  issueInOneRequest: 75
   maxTimeSleep: 300ms
   minTimeSleep: 10ms
