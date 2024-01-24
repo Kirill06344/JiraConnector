@@ -1,13 +1,11 @@
 package database
 
 import (
+	"github.com/stewie/internal/dataTransformer"
 	"github.com/stewie/internal/dto"
 	"github.com/stewie/internal/entity"
 	"gorm.io/gorm"
-	"time"
 )
-
-var ISO8061 = "2006-01-02T15:04:05.999+0000"
 
 func (repo *DB) InsertData(project *dto.Project, issues []dto.Issue) error {
 	db := repo.db
@@ -29,24 +27,7 @@ func (repo *DB) InsertData(project *dto.Project, issues []dto.Issue) error {
 				return err
 			}
 
-			createdTime, _ := time.Parse(ISO8061, issue.Fields.CreatedTime)
-			updatedTime, _ := time.Parse(ISO8061, issue.Fields.UpdatedTime)
-
-			issueEntity := entity.Issue{
-				ProjectId:   projectId,
-				AuthorId:    authorId,
-				AssigneeId:  assigneeId,
-				Key:         issue.Key,
-				CreatedTime: createdTime,
-				UpdatedTime: updatedTime,
-				Summary:     issue.Fields.Summary,
-				Description: issue.Fields.Description,
-				Priority:    issue.Fields.Priority.Name,
-				Status:      issue.Fields.Status.Name,
-				Type:        issue.Fields.Type.Name,
-			}
-
-			issueEntities[i] = issueEntity
+			issueEntities[i] = dataTransformer.IssueToEntity(&issue, projectId, authorId, assigneeId)
 		}
 
 		result := db.Create(&issueEntities)
@@ -70,7 +51,7 @@ func (repo *DB) saveProject(project *dto.Project) (uint, error) {
 	if result.RowsAffected != 0 {
 		db.Delete(&projectEntity)
 	}
-	projectEntity.Key = project.Key
+	projectEntity = dataTransformer.ProjectToEntity(project)
 	result = db.Create(&projectEntity)
 	if result.Error != nil {
 		return 0, result.Error
@@ -81,12 +62,12 @@ func (repo *DB) saveProject(project *dto.Project) (uint, error) {
 func (repo *DB) saveAuthor(author *dto.Author) (uint, error) {
 	db := repo.db
 	var authorEntity entity.Author
-	result := db.Where("name=?", author.Name).Find(&authorEntity)
+	result := db.Where("name=?", author.DisplayName).Find(&authorEntity)
 	if result.Error != nil {
 		return 0, result.Error
 	}
 	if result.RowsAffected == 0 {
-		authorEntity.Name = author.Name
+		authorEntity = dataTransformer.AuthorToEntity(author)
 		result = db.Create(&authorEntity)
 		if result.Error != nil {
 			return 0, result.Error

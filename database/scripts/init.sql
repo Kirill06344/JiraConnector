@@ -2,7 +2,9 @@ CREATE TABLE Project
 (
     id    serial PRIMARY KEY,
     key TEXT,
-    title TEXT
+    title TEXT,
+    name text,
+    url text
 );
 
 CREATE TABLE Author
@@ -27,9 +29,7 @@ CREATE TABLE Issue
     priority    TEXT,
     status      TEXT,
     created_time TIMESTAMP WITHOUT TIME ZONE,
-    closed_time  TIMESTAMP WITHOUT TIME ZONE,
-    updated_time TIMESTAMP WITHOUT TIME ZONE,
-    timeSpent   INT
+    updated_time TIMESTAMP WITHOUT TIME ZONE
 );
 
 CREATE TABLE StatusChanges

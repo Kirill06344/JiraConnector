@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	err := connector.DownloadProject("TM")
+	err := connector.DownloadProject("AAR")
 	fmt.Println(err)
 	//err := application.Configure()
 	//if err != nil {
