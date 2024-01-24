@@ -51,11 +51,11 @@ func jiraUrlProjectWithKey(key string) string {
 }
 
 func jiraUrlIssuesInfo(name string) string {
-	return fmt.Sprintf("%s/search?jql=project=%s", cfg.Program.JiraUrl, name)
+	return fmt.Sprintf("%ssearch?jql=project=%s", cfg.Program.JiraUrl, name)
 }
 
 func jiraUrlIssues(name string, startedAt int) string {
-	return fmt.Sprintf("%s/search?jql=project=%s&expand=changelog&startAt=%d&maxResults=%d",
+	return fmt.Sprintf("%ssearch?jql=project=%s&expand=changelog&startAt=%d&maxResults=%d",
 		cfg.Program.JiraUrl,
 		name,
 		startedAt,

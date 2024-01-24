@@ -26,6 +26,7 @@ type Issue struct {
 type IssueFields struct {
 	CreatedTime string        `json:"created"`
 	UpdatedTime string        `json:"updated"`
+	Description string        `json:"description"`
 	Summary     string        `json:"summary"`
 	Creator     Author        `json:"creator"`
 	Assignee    Author        `json:"reporter"`
@@ -36,10 +37,9 @@ type IssueFields struct {
 }
 
 type Author struct {
-	Id          int    `json:"id" pg:"id"`
-	Key         string `json:"key" pg:"key"`
-	Name        string `json:"name" pg:"name"`
-	DisplayName string `json:"displayName" pg:"display_name"`
+	Key         string `json:"key"`
+	Name        string `json:"name"`
+	DisplayName string `json:"displayName"`
 }
 
 type IssueType struct {

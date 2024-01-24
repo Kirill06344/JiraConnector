@@ -9,7 +9,7 @@ ProgramSettings:
   bindAddress: 127.0.0.1
   port: 8080
   jiraUrl: https://issues.apache.org/jira/rest/api/2/
-  threadCount: 9
-  issueInOneRequest: 75
+  threadCount: 1
+  issueInOneRequest: 13
   maxTimeSleep: 300ms
   minTimeSleep: 10ms

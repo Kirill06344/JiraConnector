@@ -3,11 +3,10 @@ package connector
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/stewie/internal/database"
 	"github.com/stewie/internal/dto"
 	"github.com/stewie/internal/utils"
 	"io"
-	"runtime"
-	"strconv"
 	"strings"
 	"sync"
 )
@@ -53,7 +52,7 @@ func GetProjects(params *utils.PageParams) (utils.Envelope, error) {
 	return env, nil
 }
 
-func DownloadProject(name string, key string) error {
+func DownloadProject(key string) error {
 	response, err := GetJiraConnection(jiraUrlProjectWithKey(key))
 
 	if err != nil {
@@ -65,28 +64,20 @@ func DownloadProject(name string, key string) error {
 	var project dto.Project
 	_ = json.Unmarshal(body, &project)
 
-	issues, err := downloadIssues(name)
+	issues, err := downloadIssues(&project)
 	if err != nil {
 		return err
 	}
-	println(len(issues))
-	//to db
-	return nil
-}
 
-func goid() int {
-	var buf [64]byte
-	n := runtime.Stack(buf[:], false)
-	idField := strings.Fields(strings.TrimPrefix(string(buf[:n]), "goroutine "))[0]
-	id, err := strconv.Atoi(idField)
+	db, err := database.NewDB(cfg)
 	if err != nil {
-		panic(fmt.Sprintf("cannot get goroutine id: %v", err))
+		return err
 	}
-	return id
+	return db.InsertData(&project, issues)
 }
 
-func downloadIssues(name string) ([]dto.Issue, error) {
-	response, err := GetJiraConnection(jiraUrlIssuesInfo(name))
+func downloadIssues(project *dto.Project) ([]dto.Issue, error) {
+	response, err := GetJiraConnection(jiraUrlIssuesInfo(project.Name))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +99,7 @@ func downloadIssues(name string) ([]dto.Issue, error) {
 			issueIndex := int(cfg.Program.IssueInOneRequest) * (i*threadCount + j)
 			go func() {
 				defer waitGroup.Done()
-				response, err = GetJiraConnection(jiraUrlIssues(name, issueIndex))
+				response, err = GetJiraConnection(jiraUrlIssues(project.Name, issueIndex))
 				if err != nil {
 					return
 				}
@@ -116,7 +107,11 @@ func downloadIssues(name string) ([]dto.Issue, error) {
 				body, _ := io.ReadAll(response.Body)
 
 				var newIssues dto.Issues
-				_ = json.Unmarshal(body, &newIssues)
+				err = json.Unmarshal(body, &newIssues)
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
 				if len(newIssues.Data) == 0 {
 					return
 				}
@@ -125,6 +120,7 @@ func downloadIssues(name string) ([]dto.Issue, error) {
 				defer mutex.Unlock()
 				issues = append(issues, newIssues.Data...)
 				doneRequestCount += len(newIssues.Data)
+				fmt.Println(len(issues))
 			}()
 		}
 		waitGroup.Wait()
