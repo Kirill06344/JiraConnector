@@ -17,6 +17,14 @@ func NewConnectorController(service *service.ConnectorService) *Connector {
 	}
 }
 
+// GetAllProjects GetProjects retrieving all projects
+// @Summary Retrieving all projects
+// @Description Retrieving all projects
+// @Tags connector
+// @Param limit query integer true "Projects count on one page"
+// @Param page query integer true "Number of page"
+// @Param search query string true "Search for project name"
+// @Router /api/v1/connector/projects [get]
 func (c *Connector) GetAllProjects(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
@@ -59,6 +67,14 @@ func (c *Connector) GetAllProjects(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// DownloadProject downloads project with given key from Jira
+// @Summary Downloads project with given key from Jira
+// @Description Downloads project with given key from Jira
+// @Tags connector
+// @Param key query string true "Project's key"
+// @Success 200 {object} dto.Project
+// @Failure 400 {string} string "bad request"
+// @Router /updateProject [post]
 func (c *Connector) DownloadProject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")

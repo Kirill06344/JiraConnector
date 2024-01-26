@@ -1,8 +1,10 @@
 package router
 
 import (
+	_ "backend/docs"
 	"backend/internal/controller"
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"net/http"
 )
 
@@ -16,6 +18,7 @@ func NewRouter(controllers *controller.Group) *mux.Router {
 	setIssuesPaths(controllers.Issue, router)
 	setConnectorPaths(controllers.Connector, router)
 
+	router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 	return router
 }
 

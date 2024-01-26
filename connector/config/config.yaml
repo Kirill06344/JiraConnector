@@ -1,7 +1,7 @@
 DBSettings:
   dbUser: pguser
   dbPassword: pgpwd
-  dbHost: 127.0.0.1
+  dbHost: db
   dbPort: 5432
   dbName: testdb
 

@@ -16,7 +16,7 @@ func NewConnectorService() *ConnectorService {
 }
 
 func (c *ConnectorService) GetAllProjects(params *utils.PageParams) (*pb.AllProjectResponse, error) {
-	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("connector:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (c *ConnectorService) GetAllProjects(params *utils.PageParams) (*pb.AllProj
 }
 
 func (c *ConnectorService) DownloadProject(key string) (uint, error) {
-	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("connector:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return 0, err
 	}

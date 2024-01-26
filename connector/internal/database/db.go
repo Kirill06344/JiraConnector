@@ -24,18 +24,7 @@ func NewDB(cfg *config.Config) (*DB, error) {
 func connectDB(cfg *config.Config) (*gorm.DB, error) {
 	dbCfg := cfg.DB
 	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", dbCfg.User, dbCfg.Password, dbCfg.Host, dbCfg.Port, dbCfg.Name)
-	//utils.Logger.Print("Open initialize db session")
-
-	//gormLogger := logger.New(
-	//	utils.Logger,
-	//	logger.Config{
-	//		SlowThreshold:             time.Second, // Slow SQL threshold
-	//		LogLevel:                  logger.Info, // Log level
-	//		IgnoreRecordNotFoundError: true,        // Ignore ErrRecordNotFound error for logger
-	//		ParameterizedQueries:      true,        // Don't include params in the SQL log
-	//		Colorful:                  true,        // Disable color
-	//	},
-	//)
+	fmt.Println(dsn)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -53,7 +42,6 @@ func connectDB(cfg *config.Config) (*gorm.DB, error) {
 		//utils.Logger.Fatalln("Connection to database is not established")
 		return nil, err
 	}
-	//utils.Logger.Print("Connection to database is established")
 
 	return db, err
 }
