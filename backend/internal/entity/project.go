@@ -1,9 +1,11 @@
 package entity
 
 type Project struct {
-	Id    uint
+	ID    uint
 	Title string
 	Key   string
+	Name  string
+	Url   string
 }
 
 func (Project) TableName() string {

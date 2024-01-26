@@ -14,6 +14,7 @@ func NewRouter(controllers *controller.Group) *mux.Router {
 
 	setProjectPaths(controllers.Project, router)
 	setIssuesPaths(controllers.Issue, router)
+	setConnectorPaths(controllers.Connector, router)
 
 	return router
 }
@@ -32,4 +33,9 @@ func setIssuesPaths(ic *controller.Issue, router *mux.Router) {
 	router.HandleFunc("/api/v1/issues", ic.CreateIssue).Methods("POST")
 	router.HandleFunc("/api/v1/issues/{id}", ic.UpdateIssue).Methods("PUT")
 	router.HandleFunc("/api/v1/issues/{id}", ic.DeleteIssue).Methods("DELETE")
+}
+
+func setConnectorPaths(cc *controller.Connector, router *mux.Router) {
+	router.HandleFunc("/api/v1/connector/projects", cc.GetAllProjects).Methods("GET")
+	router.HandleFunc("/api/v1/connector/updateProject", cc.DownloadProject).Methods("GET")
 }

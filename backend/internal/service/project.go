@@ -24,9 +24,10 @@ func (s *ProjectService) Find() ([]dto.Project, error) {
 	projects := make([]dto.Project, len(data))
 	for i, el := range data {
 		projects[i] = dto.Project{
-			Id:    el.Id,
-			Title: el.Title,
-			Key:   el.Key,
+			Id:          el.ID,
+			Description: el.Title,
+			Key:         el.Key,
+			Name:        el.Name,
 		}
 	}
 	return projects, nil
@@ -38,14 +39,15 @@ func (s *ProjectService) FindById(id uint) (*dto.Project, error) {
 		return nil, err
 	}
 	return &dto.Project{
-		Id:    data.Id,
-		Title: data.Title,
-		Key:   data.Key,
+		Id:          data.ID,
+		Description: data.Title,
+		Key:         data.Key,
+		Name:        data.Name,
 	}, nil
 }
 
 func (s *ProjectService) Create(project *dto.Project) error {
-	var model = entity.Project{Title: project.Title, Key: project.Key}
+	var model = entity.Project{Title: project.Description, Key: project.Key}
 	return s.repo.Create(&model)
 }
 
@@ -55,7 +57,7 @@ func (s *ProjectService) Update(id uint, project *dto.Project) error {
 		return err
 	}
 	project.Id = id
-	var model = entity.Project{Id: project.Id, Title: project.Title, Key: project.Key}
+	var model = entity.Project{ID: project.Id, Title: project.Description, Key: project.Key}
 	return s.repo.Update(&model)
 }
 

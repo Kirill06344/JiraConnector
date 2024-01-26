@@ -3,8 +3,9 @@ package connector
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stewie/internal/database"
+	"github.com/stewie/internal/application"
 	"github.com/stewie/internal/dto"
+	"github.com/stewie/internal/pb"
 	"github.com/stewie/internal/utils"
 	"io"
 	"strings"
@@ -13,7 +14,7 @@ import (
 
 var mutex sync.Mutex
 
-func GetProjects(params *utils.PageParams) (utils.Envelope, error) {
+func GetProjects(params *utils.PageParams) (*pb.AllProjectResponse, error) {
 	response, err := GetJiraConnection(jiraUrlAllProjects())
 
 	if err != nil {
@@ -37,26 +38,40 @@ func GetProjects(params *utils.PageParams) (utils.Envelope, error) {
 	}
 	pageInfo.ProjectsCount = len(projects)
 
-	if params.Page*params.Limit > len(projects) {
-		projects = projects[(params.Page-1)*params.Limit:]
+	if params.Page*params.Limit < len(projects) {
+		projects = projects[(params.Page-1)*params.Limit : params.Page*params.Limit]
 		pageInfo.CurrentPage = params.Page
 	} else {
-		projects = projects[(params.Page-1)*params.Limit : params.Page*params.Limit]
+		projects = projects[(params.Page-1)*params.Limit:]
 		pageInfo.CurrentPage = 1
 	}
 
-	env := utils.Envelope{
-		"data":     projects,
-		"pageInfo": pageInfo,
+	result := &pb.AllProjectResponse{
+		Projects: make([]*pb.Project, len(projects)),
+		PageInfo: &pb.PageInfo{
+			PageCount:     int32(pageInfo.PageCount),
+			CurrentPage:   int32(pageInfo.CurrentPage),
+			ProjectsCount: int32(pageInfo.ProjectsCount),
+		},
 	}
-	return env, nil
+
+	for i, project := range projects {
+		result.Projects[i] = &pb.Project{
+			Key:         project.Key,
+			Name:        project.Name,
+			Url:         project.URL,
+			Description: project.Description,
+		}
+	}
+
+	return result, nil
 }
 
-func DownloadProject(key string) error {
+func DownloadProject(key string) (uint, error) {
 	response, err := GetJiraConnection(jiraUrlProjectWithKey(key))
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 	body, _ := io.ReadAll(response.Body)
 	defer response.Body.Close()
@@ -66,17 +81,15 @@ func DownloadProject(key string) error {
 
 	issues, err := downloadIssues(&project)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	db, err := database.NewDB(cfg)
-	if err != nil {
-		return err
-	}
+	db := application.App.DB()
 	return db.InsertData(&project, issues)
 }
 
 func downloadIssues(project *dto.Project) ([]dto.Issue, error) {
+	cfg := application.App.Config()
 	response, err := GetJiraConnection(jiraUrlIssuesInfo(project.Name))
 	if err != nil {
 		return nil, err
@@ -88,7 +101,6 @@ func downloadIssues(project *dto.Project) ([]dto.Issue, error) {
 	_ = json.Unmarshal(body, &issuesInfo)
 
 	threadCount := int(cfg.Program.ThreadCount)
-	//fix this
 	parallelDownloadsAmount := issuesInfo.Total/(int(cfg.Program.IssueInOneRequest)*threadCount) + 1
 	var issues []dto.Issue
 	doneRequestCount := 0

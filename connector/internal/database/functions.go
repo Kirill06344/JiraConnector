@@ -7,14 +7,14 @@ import (
 	"gorm.io/gorm"
 )
 
-func (repo *DB) InsertData(project *dto.Project, issues []dto.Issue) error {
+func (repo *DB) InsertData(project *dto.Project, issues []dto.Issue) (uint, error) {
 	db := repo.db
 	err := db.Transaction(func(tx *gorm.DB) error {
 		projectId, err := repo.saveProject(project)
 		if err != nil {
 			return err
 		}
-
+		project.ID = projectId
 		issueEntities := make([]entity.Issue, len(issues))
 		for i, issue := range issues {
 			authorId, err := repo.saveAuthor(&issue.Fields.Creator)
@@ -37,7 +37,7 @@ func (repo *DB) InsertData(project *dto.Project, issues []dto.Issue) error {
 
 		return nil
 	})
-	return err
+	return project.ID, err
 }
 
 func (repo *DB) saveProject(project *dto.Project) (uint, error) {

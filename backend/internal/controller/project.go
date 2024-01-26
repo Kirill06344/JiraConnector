@@ -18,7 +18,10 @@ func NewProjectController(service *service.ProjectService) *Project {
 }
 
 func (pc *Project) GetAllProjects(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	name := "Jira Analyzer REST API Get Projects"
+
 	projects, err := pc.service.Find()
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		ServerErrorResponse(w, r, err, name)
@@ -67,6 +70,9 @@ func (pc *Project) GetProject(w http.ResponseWriter, r *http.Request) {
 }
 
 func (pc *Project) CreateProject(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 	name := "Jira Analyzer REST API Create Project"
 	var input struct {
 		Title string `json:"Title"`
@@ -79,7 +85,7 @@ func (pc *Project) CreateProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	project := &dto.Project{
-		Title: input.Title,
+		Description: input.Title,
 	}
 
 	err = pc.service.Create(project)
@@ -118,7 +124,7 @@ func (pc *Project) UpdateProject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	project := &dto.Project{
-		Title: input.Title,
+		Description: input.Title,
 	}
 
 	err = pc.service.Update(id, project)
