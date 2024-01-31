@@ -1,1 +1,1 @@
-Hello, little programming enthusiasts!
+Jira Analyzer Project.

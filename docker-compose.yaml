@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    links:
+      - "db:database"
+      - "connector:connector"
+    networks:
+      - postgres
+
+  connector:
+    build:
+      context: ./connector
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+    depends_on:
+      - db
+    links:
+      - db
+    networks:
+      - postgres
+
+  db:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "testdb"
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+
+  pgadmin:
+    image: dpage/pgadmin4:5.7
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pguser@mail.ru
+      PGADMIN_DEFAULT_PASSWORD: pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge

@@ -1,0 +1,15 @@
+DBSettings:
+  dbUser: pguser
+  dbPassword: pgpwd
+  dbHost: db
+  dbPort: 5432
+  dbName: testdb
+
+ProgramSettings:
+  bindAddress: 127.0.0.1
+  port: 8080
+  jiraUrl: https://issues.apache.org/jira/rest/api/2/
+  threadCount: 5
+  issueInOneRequest: 75
+  maxTimeSleep: 300ms
+  minTimeSleep: 10ms
