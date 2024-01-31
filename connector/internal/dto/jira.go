@@ -1,6 +1,7 @@
 package dto
 
 type Project struct {
+	ID          uint
 	Key         string `json:"key"`
 	Name        string `json:"name"`
 	URL         string `json:"self"`

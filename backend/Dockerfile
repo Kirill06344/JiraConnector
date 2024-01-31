@@ -10,10 +10,12 @@ COPY . .
 
 WORKDIR /app/cmd/main
 
-EXPOSE 50051
+EXPOSE 8000
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /connector
+RUN CGO_ENABLED=0 GOOS=linux go build -o /backend
 
 WORKDIR /app
 
-CMD ["/connector"]
+RUN ls
+
+CMD ["/backend"]

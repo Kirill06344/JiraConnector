@@ -58,9 +58,9 @@ func (s *IssueService) convertEntityToDto(el *entity.Issue) dto.Issue {
 	return dto.Issue{
 		Id: el.ID,
 		Project: dto.Project{
-			Id:    project.Id,
-			Title: project.Title,
-			Key:   project.Key,
+			Id:          project.ID,
+			Description: project.Title,
+			Key:         project.Key,
 		},
 		Key:         el.Key,
 		CreatedTime: el.CreatedTime,

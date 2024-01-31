@@ -7,8 +7,15 @@ import (
 	"backend/internal/service"
 	"backend/internal/utils"
 	"fmt"
+	_ "github.com/swaggo/swag"
 	"net/http"
 )
+
+// @title JIRA_Analyzer
+// @version	1.0
+// @description	Разработка промышленного клиент-серверного приложения с применением принципов микросервисной архитектуры, языков программирования Golang, фрейморка Angular и TypeScript.
+// @BasePath /
+// @host localhost:8000
 
 func main() {
 	config, err := utils.GetConfig("config.yml")

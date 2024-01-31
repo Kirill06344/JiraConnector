@@ -1,13 +1,13 @@
 dbSettings:
   dbUser: pguser
   dbPassword: pgpwd
-  dbHost: 127.0.0.1
+  dbHost: db
   dbPort: 5432
   dbName: testdb
 
 
 programSettings:
-  bindAddress: 127.0.0.1
+  bindAddress: localhost
   port: 8000
   resourceTimeout: 5
   analyticsTimeout: 15
