@@ -2,7 +2,9 @@ version: '3.7'
 
 services:
   backend:
-    image: stewie/backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     depends_on:
@@ -14,7 +16,9 @@ services:
       - postgres
 
   connector:
-    image: stewie/connector:latest
+    build:
+      context: ./connector
+      dockerfile: Dockerfile
     ports:
       - "50051:50051"
     depends_on:

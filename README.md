@@ -1,2 +1,1 @@
-Hello, little programming enthusiasts!
-It's dev!
+Jira Analyzer Project.
